@@ -138,6 +138,12 @@ class API
     protected function setupApiConfigFromFile(string $file = null)
     {
         $file = is_null($file) ? getenv("HOME") . "../config/jaggedsoft/php-binance-api.json" : $file;
+        //one more try another way
+        if (file_exists($file) == false) {
+            $file = "./config/jaggedsoft/php-binance-api.json";
+        }
+        // END one more try another way
+
 
         if (empty($this->api_key) === false || empty($this->api_secret) === false) {
             return;
@@ -164,6 +170,12 @@ class API
     protected function setupCurlOptsFromFile(string $file = null)
     {
         $file = is_null($file) ? getenv("HOME") . "../config/jaggedsoft/php-binance-api.json" : $file;
+        //one more try another way
+        if (file_exists($file) === false) {
+            $file = "./config/jaggedsoft/php-binance-api.json";
+        }
+        // END one more try another way
+
 
         if (count($this->curlOpts) > 0) {
             return;
@@ -187,6 +199,12 @@ class API
     protected function setupProxyConfigFromFile(string $file = null)
     {
         $file = is_null($file) ? getenv("HOME") . "../config/jaggedsoft/php-binance-api.json" : $file;
+        //one more try another way
+        if (file_exists($file) === false) {
+            $file = "./config/jaggedsoft/php-binance-api.json";
+        }
+        // END one more try another way
+
 
         if (is_null($this->proxyConf) === false) { 
             return;
@@ -444,8 +462,8 @@ class API
      */
     public function marketSell(string $symbol, $quantity, array $flags = [])
     {
-        $c = $this->numberOfDecimals($this->exchangeInfo()['symbols'][$symbol]['filters'][2]['minQty']);
-        $quantity = $this->floorDecimal($quantity, $c);
+        //$c = $this->numberOfDecimals($this->exchangeInfo()['symbols'][$symbol]['filters'][2]['minQty']);
+        $quantity = $this->floorDecimal($quantity); //, $c
 
         return $this->order("SELL", $symbol, $quantity, 0, "MARKET", $flags);
     }

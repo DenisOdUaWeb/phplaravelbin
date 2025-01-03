@@ -1,3 +1,29 @@
+
+
+
+<?php 
+//definitions
+
+// massiv assetov i ih stavka (konst)
+$TOOL_AR = [['DOTUSDT', 650],['SANDUSDT', 5000],['ADAUSDT', 5000]];
+
+//or one set of asset and bid
+$oneasset = ['ADAUSDT', 650];
+
+//stavka dla odnogo tula
+$bid = 500; // 5000 bid for a d a
+
+// the number kak xwosT begaet
+$xvost = 0;
+
+//proverit skolko bulo orderov za posl 5 minut esli mnogo to stop prog na 3 minutu, ili esli bolshe 3h orderov to (posledniy order na prodagu , to ne pokupaem pokachto , no pokupaem esli silno uskakala vverh resko )
+// $kolvo_vupolnenuh_orderov_za_5_min = function
+//ili skolko vremeni proshlo so vremeni poslednego orda
+
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
@@ -20,19 +46,93 @@
         @endif
     </head>
     <body class="font-sans antialiased dark:bg-black dark:text-white/50">
-    <div><h2>binanc</h2>
-                                            <div>
-                                                <?php 
-                                                    $api = new Binance\API();
-                                                    $price = $api->price("BNBUSDT");
-                                                    echo "Price of BNB: {$price} USDT.".PHP_EOL;
+    <div><h2>binanc </h2>
+    <p>https://docs.binance.us/#all-orders-user_data</p>
+    <div>
+ 
+<?php 
 
-                                                    //$quantity = 1;
-//$price = 1;
+
+
+$api = new Binance\API();
+$price = $api->price("BNBUSDT");
+echo "Price of BNB: {$price} USDT.".PHP_EOL;
+
+//$assets = array();
+$assets = ['BNBUSDT', 'SANDUSDT', 'DOTUSDT', 'ADAUSDT'];
+
+foreach ($assets as &$asset){
+    $price = $api->price($asset);
+    echo "<br> Price of {$asset}: {$price} USDT.".PHP_EOL;
+}
+
+
+
+
+//lim ord
+//$quantity = 0.00015;
+//$price = 40493;
 //$order = $api->buy("BTCUSDT", $quantity, $price);    
 
-$openorders = $api->openOrders("LTCUSDT");echo "<br>";
-print_r($openorders);echo "<br>";
+//st_l_or
+//$type = "STOP_LOSS"; // Set the type STOP_LOSS (market) or STOP_LOSS_LIMIT, and TAKE_PROFIT (market) or TAKE_PROFIT_LIMIT
+//$quantity = 1;
+//$price = 0.5; // Try to sell it for 0.5 btc
+//$stopPrice = 0.4; // Sell immediately if price goes below 0.4 btc
+///$order = $api->sell("BNBBTC", $quantity, $price, $type, ["stopPrice"=>$stopPrice]);
+
+$ticker = $api->prices(); // Make sure you have an updated ticker object for this to work
+$balances = $api->balances($ticker);
+//print_r($balances);
+echo "<br>";
+echo "DOT available: ".$balances['DOT']['available'].PHP_EOL;
+echo "<br>";
+echo "DOT onOrder: ".$balances['DOT']['onOrder'].PHP_EOL;
+echo "<br>";
+echo "DOT btcTotal: ".$balances['DOT']['btcTotal'].PHP_EOL;
+echo "<br>";
+echo "DOT btcValue: ".$balances['DOT']['btcValue'].PHP_EOL;
+echo "<br>";
+echo "DOT TOTAL: ".$balances['DOT']['onOrder']+$balances['DOT']['available'];
+echo "<br>";
+echo "ADA owned: ".$balances['ADA']['available'].PHP_EOL;
+echo "<br>";
+echo "Estimated Value: ".$api->btc_value." BTC".PHP_EOL;
+
+$openorders = $api->openOrders("ADAUSDT");
+echo ' 0 orderId ADA'.$openorders[0]['orderId'];
+print_r($openorders);
+
+$ADAsold = '?';
+$ADAsold = true;
+var_dump($ADAsold);
+
+$bidADA = 500;
+$order = $api->marketSell("ADAUSDT", $bidADA);
+if($order){
+    echo 'SOLD';
+}else {
+    echo 'NOT SOLD';
+}
+//ST_LO_s MARKET OR LIMIT ($type = "STOP_LOSS_LIMIT"; $type = "STOP_LOSS";)
+//$type = "STOP_LOSS"; // Set the type STOP_LOSS (market) or STOP_LOSS_LIMIT, and TAKE_PROFIT (market) or TAKE_PROFIT_LIMIT
+//$quantity = 650;
+//$price = 6.591; // Try to sell it for this price in case of STOP_LOSS_LIMIT (OR MARKER IF STPO LOSS)
+//$stopPrice = 6.592; // Sell immediately if price goes below 0.4 btc
+//$order = $api->sell("DOTUSDT", $quantity, $price, $type, ["stopPrice"=>$stopPrice]);
+//print_r($order);
+
+//check ordr
+//$openorders = $api->openOrders("BTCUSDT");echo "<br>";
+//print_r($openorders);echo "<br>";
+
+
+// SOME FORMAT INFORMATION 
+//But wouldn't that be the LOT_SIZE error, thats what im doing with the
+//DecimalFormat btcusdt = new DecimalFormat("#.######");
+//DecimalFormat ethusdt = new DecimalFormat("#.#####");
+//DecimalFormat ethbtc = new DecimalFormat("#.###");
+//i have it in the right format for the trade.
                                                 ?> 
                                             
                                             </div>
