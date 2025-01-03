@@ -37,8 +37,8 @@ class EveryFiveSecondsClass
     private function checkPriceADA($balances){
         $ADAmax = '?';
         $api = new Binance\API();
-        $stopLineADA = 0.9627;
-        $maxAmountADA = 10728;
+        $stopLineADA = 1.0550;
+        $maxAmountADA = 10736;
         $bidADA = 100;
         $totalADA = $balances['ADA']['onOrder']+$balances['ADA']['available'];
         if($totalADA >= $maxAmountADA){
